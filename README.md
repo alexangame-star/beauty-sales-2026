@@ -1,0 +1,1 @@
+# beauty-sales-2026
