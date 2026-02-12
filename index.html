@@ -4,6 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 рік розумних продажів у бʼюті — Вікторія Близнюк</title>
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '507635751864972');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=507635751864972&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -250,6 +270,19 @@
   }
   .video-container iframe {
     position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+    pointer-events: none;
+  }
+  /* overlay блокує клік по логотипу YouTube та посиланнях */
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: transparent;
+    /* блокує верхній правий кут де логотип YouTube */
+  }
+  /* дозволяємо кліки тільки по центру (кнопка play) */
+  .video-overlay.playing {
+    pointer-events: none;
   }
   .video-placeholder {
     position: absolute; inset: 0;
@@ -490,10 +523,13 @@
   <div class="video-wrap reveal">
     <div class="video-container">
       <iframe
-        src="https://www.youtube.com/embed/HcF3zBHm1BA?rel=0&modestbranding=1&color=white"
+        id="ytPlayer"
+        src="https://www.youtube.com/embed/HcF3zBHm1BA?rel=0&modestbranding=1&color=white&enablejsapi=1&disablekb=1"
         allowfullscreen
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
       </iframe>
+      <!-- Overlay — блокує логотип YouTube та зовнішні посилання -->
+      <div class="video-overlay" id="videoOverlay"></div>
     </div>
   </div>
 </section>
@@ -558,8 +594,7 @@
   <h2 class="reveal">Хочете, щоб ми розібрали<br><em>ваш</em> бізнес особисто?</h2>
   <p class="cta-desc reveal">Команда Вікторії проводить безкоштовний 60-хвилинний аудит — знайдемо слабкі місця та точки росту саме у вашому салоні</p>
 
-  <!-- ═══ ЗАМІНІТЬ href на реальне посилання анкети ═══ -->
-  <a href="#ПОСИЛАННЯ_НА_АНКЕТУ" class="cta-btn reveal">Заповнити анкету на аудит</a>
+  <a href="https://anketapredzapusu.adsquiz.io/?utm_source=vsl&utm_medium=trafik&utm_campaign=2026yearforsale" class="cta-btn reveal" target="_blank" rel="noopener" onclick="fbq('track', 'Lead')">Заповнити анкету на аудит</a>
 
   <div class="seats-visual reveal">
     <div class="seats-row" id="seatsRow"></div>
@@ -583,7 +618,23 @@ const obs = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* ─── PHOTO FALLBACK ─── */
+/* ─── VIDEO OVERLAY — блок переходу на YouTube ─── */
+(function() {
+  const overlay = document.getElementById('videoOverlay');
+  if (!overlay) return;
+
+  // Клік по overlay — передаємо подію програвання через YouTube API
+  overlay.addEventListener('click', function() {
+    const iframe = document.getElementById('ytPlayer');
+    if (iframe) {
+      iframe.contentWindow.postMessage(
+        '{"event":"command","func":"playVideo","args":""}', '*'
+      );
+    }
+    // Після кліку прибираємо overlay щоб можна було керувати плеєром
+    overlay.classList.add('playing');
+  });
+})();
 (function() {
   const img      = document.getElementById('heroImg');
   const fallback = document.getElementById('photoFallback');
