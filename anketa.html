@@ -157,6 +157,31 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
     </div>
 
     <div class="field">
+      <label>Ваша роль</label>
+      <div class="rgrid" id="roleGrid">
+        <div class="ropt" data-val="Власник">Власник</div>
+        <div class="ropt" data-val="Власник і майстер">Власник і майстер</div>
+        <div class="ropt" data-val="Керуюча салону">Керуюча салону</div>
+        <div class="ropt" data-val="Адміністратор">Адміністратор</div>
+        <div class="ropt" data-val="Хочу відкрити свій бізнес">Хочу відкрити свій бізнес</div>
+      </div>
+      <div class="err" id="errRole">Оберіть варіант</div>
+    </div>
+
+    <div class="field">
+      <label>Оборот салону</label>
+      <div class="rgrid" id="revGrid">
+        <div class="ropt" data-val="до 50 000 грн">до 50 000 грн</div>
+        <div class="ropt" data-val="50–150 тис">50–150 тис</div>
+        <div class="ropt" data-val="150–300 тис">150–300 тис</div>
+        <div class="ropt" data-val="300–500 тис">300–500 тис</div>
+        <div class="ropt" data-val="500 тис–1 млн">500 тис–1 млн</div>
+        <div class="ropt" data-val="від 1 млн грн">від 1 млн грн</div>
+      </div>
+      <div class="err" id="errRev">Оберіть варіант</div>
+    </div>
+
+    <div class="field">
       <label>Головна біль зараз</label>
       <div class="rgrid one-col" id="painGrid">
         <div class="ropt" data-val="Хаос в операційці — я всередині всього">Хаос в операційці — я всередині всього</div>
@@ -193,10 +218,10 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
   <p class="ty-desc">Дякуємо — ви серед перших. Команда Вікторії звʼяжеться з вами найближчим часом і розкаже про умови участі.</p>
 
   <div class="video-cta">
-    <div class="vc-badge">🎁 Ваш бонус вже готовий</div>
-    <div class="vc-title">Урок: <em>Як працювати з клієнтом у 2026 році</em></div>
-    <div class="vc-desc">Поки команда готується до дзвінка — подивіться урок. Конкретні інструменти вже сьогодні.</div>
-    <a href="https://alexangame-star.github.io/beauty-sales-2026/" class="btn-video">▶ Дивитись урок зараз</a>
+    <div class="vc-badge">🎁 Ваш подарунок вже готовий</div>
+    <div class="vc-title">Отримайте <em>Бʼюті пак</em> зараз</div>
+    <div class="vc-desc">Ексклюзивна добірка матеріалів від Вікторії — шаблони, чек-листи, інструменти для салону.</div>
+    <a href="https://t.me/+ZBt0siWc4kQ4YzNi" class="btn-video" target="_blank" rel="noopener">🎁 Отримати Бʼюті пак</a>
   </div>
 
   <div class="social-block">
@@ -228,7 +253,7 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
 <script>
 (function(){
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAQfSAyQfeBAPIwLd_9Gt9TXonq-F7eI7O6bMFgVzJiVrZTyNZHUu1qBO4fh1cg91m/exec';
-  var sel = { exp:'', pain:'' };
+  var sel = { exp:'', role:'', rev:'', pain:'' };
 
   // Зчитуємо параметри з URL (передані з калькулятора)
   var params = new URLSearchParams(window.location.search);
@@ -285,6 +310,8 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
     });
   }
   initGrid('expGrid',  'exp',  'errExp');
+  initGrid('roleGrid', 'role', 'errRole');
+  initGrid('revGrid',  'rev',  'errRev');
   initGrid('painGrid', 'pain', 'errPain');
 
   window.submitForm = function() {
@@ -298,6 +325,8 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
     if (!phone)    { document.getElementById('errPhone').classList.add('on'); ok=false; } else document.getElementById('errPhone').classList.remove('on');
     if (!tg)       { document.getElementById('errTg').classList.add('on');    ok=false; } else document.getElementById('errTg').classList.remove('on');
     if (!sel.exp)  { document.getElementById('errExp').classList.add('on');   ok=false; }
+    if (!sel.role) { document.getElementById('errRole').classList.add('on');  ok=false; }
+    if (!sel.rev)  { document.getElementById('errRev').classList.add('on');   ok=false; }
     if (!sel.pain) { document.getElementById('errPain').classList.add('on');  ok=false; }
     if (!ok) return;
 
@@ -310,8 +339,8 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
       name:       name,
       phone:      phone,
       telegram:   tg,
-      role:       pRole || '—',
-      revenue:    pRev || '—',
+      role:       sel.role,
+      revenue:    sel.rev,
       experience: sel.exp,
       pain:       sel.pain,
       how_found:  src || '—'
@@ -336,6 +365,10 @@ html,body{background:var(--navy);color:var(--text);font-family:"Jost",sans-serif
   }
 
 })();
+
+</script>
+</body>
+</html>
 
 </script>
 </body>
